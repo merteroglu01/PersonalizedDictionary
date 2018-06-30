@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<VBox prefHeight="400.0" fx:controller="sample.Controller" prefWidth="640.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <MenuBar VBox.vgrow="NEVER">
+            <menus>
+                <Menu mnemonicParsing="false" text="File">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="Shortcuts" />
+                        <MenuItem mnemonicParsing="false" text="Quit" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Edit">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="Undo" />
+                        <MenuItem mnemonicParsing="false" text="Cut" />
+                        <MenuItem mnemonicParsing="false" text="Copy" />
+                        <MenuItem mnemonicParsing="false" text="Paste" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="About">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="About Developer" />
+                        <MenuItem mnemonicParsing="false" text="License" />
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+        <AnchorPane fx:id="infoText" maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+            <children>
+                <Label alignment="CENTER" layoutX="155.0" layoutY="177.0" style="&#10;" text="Drag components from Library here…" textAlignment="CENTER" textFill="#9f9f9f" wrapText="false">
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                </Label>
+                <TextField fx:id="addForeignWordTextField" layoutX="79.0" layoutY="233.0" promptText="Foreign Word" />
+                <TextField fx:id="addNativeWordTextField" layoutX="272.0" layoutY="233.0" promptText="Native Word" />
+                <Button fx:id="addWordBtn" layoutX="479.0" layoutY="230.0" mnemonicParsing="false" text="Add" textAlignment="CENTER" />
+                <Button fx:id="dailyExerciseBtn" layoutX="79.0" layoutY="22.0" mnemonicParsing="false" text="Daily Work Out" />
+                <Button fx:id="weeklyExerciseBtn" layoutX="264.0" layoutY="22.0" mnemonicParsing="false" text="Weekly Exercise" />
+                <Button fx:id="fullExerciseBtn" layoutX="460.0" layoutY="22.0" mnemonicParsing="false" text="Full Exercise" />
+                <Button fx:id="checkBtn" layoutX="476.0" layoutY="132.0" mnemonicParsing="false" text="Check !" textAlignment="CENTER" />
+                <TextField fx:id="tryForeignWordTextField" focusTraversable="false" layoutX="87.0" layoutY="136.0" promptText="Foreign Word" visible="false" />
+                <TextField fx:id="tryNativeWordTextField" layoutX="272.0" layoutY="136.0" promptText="Native Word" />
+                <Text fx:id="foreignWordText" layoutX="79.0" layoutY="153.0" lineSpacing="3.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ForeignWordText" textAlignment="CENTER" />
+                <Text fx:id="nativeWordText" layoutX="272.0" layoutY="153.0" lineSpacing="3.0" strokeType="OUTSIDE" strokeWidth="0.0" text="NativeWordText" textAlignment="CENTER" visible="false" />
+                <ToggleButton fx:id="changeInputAreaToggleBtn" layoutX="463.0" layoutY="326.0" mnemonicParsing="false" text="Change Exercise Type" />
+                <Text fill="RED" layoutX="210.0" layoutY="101.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to Personalized Dictionary !" textAlignment="CENTER" />
+            </children>
+        </AnchorPane>
+    </children>
+</VBox>
