@@ -1,7 +1,5 @@
 package com.merteroglu;
 
-import com.merteroglu.util.FileOperations;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,8 +8,8 @@ public class Dictionary {
     public static List<String[]> dailyExerciseWordList = new ArrayList<>();
     public static List<String[]> weeklyExerciseWordList = new ArrayList<>();
     public static List<String[]> allTimeExerciseWordList = new ArrayList<>();
-    public static final long oneDayInMiliSeconds = 86400000L;
-    public static final long oneWeekInMiliSeconds = 86400000L;
+    public static final long ONE_DAY_IN_MILLI_SECONDS = 86400000L;
+    public static final long ONE_WEEK_IN_MILLI_SECONDS = 86400000L;
     public static long currentTime = System.currentTimeMillis();
     public static int dailyListSize = 0;
     public static int weeklyListSize = 0;
@@ -23,11 +21,11 @@ public class Dictionary {
         for (String line :
                 lines) {
             String[] tmp = (line.split(" "));
-            if(currentTime - Long.valueOf(tmp[2]) < oneDayInMiliSeconds ) {
+            if(currentTime - Long.valueOf(tmp[2]) < ONE_DAY_IN_MILLI_SECONDS) {
                 dailyExerciseWordList.add(tmp);
                 weeklyExerciseWordList.add(tmp);
                 allTimeExerciseWordList.add(tmp);
-            }else if(currentTime - Long.valueOf(tmp[2]) > oneWeekInMiliSeconds) allTimeExerciseWordList.add(tmp);
+            }else if(currentTime - Long.valueOf(tmp[2]) > ONE_WEEK_IN_MILLI_SECONDS) allTimeExerciseWordList.add(tmp);
             else {
                 weeklyExerciseWordList.add(tmp);
             }

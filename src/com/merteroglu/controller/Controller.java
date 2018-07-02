@@ -1,5 +1,6 @@
 package com.merteroglu.controller;
 
+import com.merteroglu.Config;
 import com.merteroglu.Dictionary;
 import com.merteroglu.util.FileOperations;
 import javafx.fxml.FXML;
@@ -9,7 +10,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.text.Text;
 
+import java.awt.*;
 import java.io.IOException;
+import java.net.URI;
 import java.util.Random;
 
 public class Controller {
@@ -43,7 +46,7 @@ public class Controller {
     @FXML
     private TextField tryNativeWordTextField;
 
-    private String tryNativeWord ="";
+    private String tryNativeWord = "";
 
     private String nativeWordInput = "";
 
@@ -66,11 +69,30 @@ public class Controller {
     private String[] row = new String[3];
 
     private Random random = new Random();
+
     @FXML
-    private void saveToDictionary(){
+    private Text linkedInURL;
+
+    private static Desktop desktop = Desktop.getDesktop();
+
+    @FXML
+    private Text webSiteURL;
+
+    @FXML
+    Text licenceURL;
+
+
+    private static final String linkedInURLasString = "https://linkedin.com/in/merteroglu";
+
+    private static final String webSiteURLasString = "https://www.merteroglu.com.tr";
+
+    private static final String licenceURLasString = webSiteURLasString + "/general-licence.html";
+
+    @FXML
+    private void saveToDictionary() {
         try {
-            FileOperations.addToDictionary(addForeignWordTextField.getText(),addNativeWordTextField.getText());
-            String[] row = new String[]{addForeignWordTextField.getText(),addNativeWordTextField.getText(),String.valueOf(System.currentTimeMillis())};
+            FileOperations.addToDictionary(addForeignWordTextField.getText(), addNativeWordTextField.getText());
+            String[] row = new String[]{addForeignWordTextField.getText(), addNativeWordTextField.getText(), String.valueOf(System.currentTimeMillis())};
             Dictionary.dailyExerciseWordList.add(row);
             Dictionary.weeklyExerciseWordList.add(row);
             Dictionary.allTimeExerciseWordList.add(row);
@@ -88,53 +110,58 @@ public class Controller {
     }
 
     @FXML
-    private void startDailyExercise(){
+    private void startDailyExercise() {
         goToNextWord();
     }
 
     @FXML
-    private void goToNextWord(){
+    private void goToNextWord() {
         int tmpNumber;
-        switch (Dictionary.exerciseMod){
-            case 0:{
-                tmpNumber = random.nextInt(Dictionary.dailyListSize);
+        switch (Dictionary.exerciseMod) {
+            case 0: {
+                if(Config.shuffleMod) tmpNumber = random.nextInt(Dictionary.dailyListSize);
+                else tmpNumber = getCounterNumber();
                 tryForeignWord = Dictionary.dailyExerciseWordList.get(tmpNumber)[0];
                 tryNativeWord = Dictionary.dailyExerciseWordList.get(tmpNumber)[1];
-                foreignWordText.setText(tryForeignWord);
                 nativeWordText.setText(tryNativeWord);
-                break;
-            }case 1:{
-                tmpNumber = random.nextInt(Dictionary.weeklyListSize);
-                tryForeignWord = Dictionary.dailyExerciseWordList.get(tmpNumber)[0];
-                tryNativeWord = Dictionary.dailyExerciseWordList.get(tmpNumber)[1];
                 foreignWordText.setText(tryForeignWord);
-                nativeWordText.setText(tryNativeWord);
                 break;
-            }case 2:{
-                tmpNumber = random.nextInt(Dictionary.allTimeListSize);
-                tryForeignWord = Dictionary.dailyExerciseWordList.get(tmpNumber)[0];
-                tryNativeWord = Dictionary.dailyExerciseWordList.get(tmpNumber)[1];
+            }
+            case 1: {
+                if(Config.shuffleMod) tmpNumber = random.nextInt(Dictionary.weeklyListSize);
+                else tmpNumber = getCounterNumber();
+                tryForeignWord = Dictionary.weeklyExerciseWordList.get(tmpNumber)[0];
+                tryNativeWord = Dictionary.weeklyExerciseWordList.get(tmpNumber)[1];
                 foreignWordText.setText(tryForeignWord);
                 nativeWordText.setText(tryNativeWord);
                 break;
             }
-            default:break;
+            case 2: {
+                if(Config.shuffleMod) tmpNumber = random.nextInt(Dictionary.allTimeListSize);
+                else tmpNumber = getCounterNumber();
+                tryForeignWord = Dictionary.allTimeExerciseWordList.get(tmpNumber)[0];
+                tryNativeWord = Dictionary.allTimeExerciseWordList.get(tmpNumber)[1];
+                foreignWordText.setText(tryForeignWord);
+                nativeWordText.setText(tryNativeWord);
+                break;
+            }
+            default:
+                break;
         }
     }
 
     @FXML
-    private void dailyMod(){
+    private void dailyMod() {
         Dictionary.exerciseMod = 0;
         infoText.setText("Daily Exercise Mod Activated!");
-        if(Dictionary.dailyExerciseWordList.size() == 0) infoText.setText("Your Dictionary Is Empty !");
+        if (Dictionary.dailyExerciseWordList.size() == 0) infoText.setText("Your Dictionary Is Empty !");
         else {
             row = Dictionary.dailyExerciseWordList.get(random.nextInt(Dictionary.dailyListSize));
-            if(exerciseType == 0){
+            if (exerciseType == 0) {
                 foreignWordText.setText(row[0]);
                 tryForeignWord = row[0];
                 tryNativeWord = row[1];
-            }
-            else {
+            } else {
                 nativeWordText.setText(row[1]);
                 tryForeignWord = row[0];
                 tryNativeWord = row[1];
@@ -143,18 +170,17 @@ public class Controller {
     }
 
     @FXML
-    private void weeklyMod(){
+    private void weeklyMod() {
         Dictionary.exerciseMod = 1;
         infoText.setText("Weekly Exercise Mod Activated!");
-        if(Dictionary.weeklyExerciseWordList.size() == 0) infoText.setText("Your Dictionary Is Empty !");
+        if (Dictionary.weeklyExerciseWordList.size() == 0) infoText.setText("Your Dictionary Is Empty !");
         else {
             row = Dictionary.weeklyExerciseWordList.get(random.nextInt(Dictionary.weeklyListSize));
-            if(exerciseType == 0){
+            if (exerciseType == 0) {
                 foreignWordText.setText(row[0]);
                 tryForeignWord = row[0];
                 tryNativeWord = row[1];
-            }
-            else {
+            } else {
                 nativeWordText.setText(row[1]);
                 tryNativeWord = row[1];
                 tryForeignWord = row[0];
@@ -164,65 +190,135 @@ public class Controller {
     }
 
     @FXML
-    private void allTimeMod(){
+    private void allTimeMod() {
         Dictionary.exerciseMod = 2;
         infoText.setText("All Time Exercise Mod Activated!");
-        if(Dictionary.allTimeExerciseWordList.size() == 0) infoText.setText("Your Dictionary Is Empty !");
+        if (Dictionary.allTimeExerciseWordList.size() == 0) infoText.setText("Your Dictionary Is Empty !");
         else {
             row = Dictionary.allTimeExerciseWordList.get(random.nextInt(Dictionary.allTimeListSize));
-            if(exerciseType == 0){
+            if (exerciseType == 0) {
                 foreignWordText.setText(row[0]);
                 tryNativeWord = row[1];
                 tryForeignWord = row[0];
-            }
-            else {
+            } else {
                 nativeWordText.setText(row[1]);
                 tryNativeWord = row[1];
                 tryForeignWord = row[0];
-
             }
         }
     }
 
     @FXML
-    private void changeExerciseType(){
-        if(exerciseType == 0){
+    private void changeExerciseType() {
+        if (exerciseType == 0) {
             foreignWordText.setVisible(false);
             tryForeignWordTextField.setVisible(true);
             nativeWordText.setVisible(true);
             tryNativeWordTextField.setVisible(false);
             exerciseType = 1;
-            infoText.setText("Exercise Type Changed !");
-        }
-        else {
+        } else {
             foreignWordText.setVisible(true);
             tryForeignWordTextField.setVisible(false);
             nativeWordText.setVisible(false);
             tryNativeWordTextField.setVisible(true);
             exerciseType = 0;
-            infoText.setText("Exercise Type Changed !");
         }
+        switch (Dictionary.exerciseMod) {
+            case 0:
+                dailyMod();
+                break;
+            case 1:
+                weeklyMod();
+                break;
+            case 2:
+                allTimeMod();
+                break;
+            default:
+                break;
+        }
+        infoText.setText("Exercise Type Changed !");
     }
 
     @FXML
-    private void check(){
-        if(!tryForeignWord.isEmpty()){
-            if(exerciseType == 0){
+    private void check() {
+        if (!tryForeignWord.isEmpty()) {
+            if (exerciseType == 0) {
                 nativeWordInput = tryNativeWordTextField.getText().trim().toLowerCase();
-                if(tryNativeWord.equals(nativeWordInput)){
+                if (tryNativeWord.equals(nativeWordInput)) {
                     infoText.setText("Correct!");
                     goToNextWord();
-                }
-                else infoText.setText("Not correct!");
-            }else {
+                } else infoText.setText("Not correct!");
+            } else {
                 foreignWordInput = tryForeignWordTextField.getText().trim().toLowerCase();
-                if(tryForeignWord.equals(foreignWordInput)){
+                if (tryForeignWord.equals(foreignWordInput)) {
                     infoText.setText("Correct!");
                     goToNextWord();
                 }
             }
-        }else {
+        } else {
             infoText.setText("Please Choose Exercise Mod !");
         }
     }
+
+    @FXML
+    private void linkedInURLonClick() {
+        try {
+            desktop.browse(URI.create(linkedInURLasString));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void webSiteURLonClick() {
+        try {
+            desktop.browse(URI.create(webSiteURLasString));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void licenceURLonClick() {
+        try {
+            desktop.browse(URI.create(licenceURLasString));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void changeShuffleMod(){
+        if(Config.shuffleMod) { Config.shuffleMod = false; infoText.setText("Shuffle Mod Closed!"); }
+        else { Config.shuffleMod = true; infoText.setText("Shuffle Mod Opened!"); }
+    }
+
+    private int getCounterNumber() {
+        switch (Dictionary.exerciseMod) {
+            case 0:
+                if (Config.counter + 1 >= Dictionary.dailyListSize) {
+                    infoText.setText("All Words Studied!");
+                    Config.counter = 0;
+                    return 0;
+                } else
+                    return ++Config.counter;
+            case 1:
+                if (Config.counter + 1 >= Dictionary.weeklyListSize) {
+                    infoText.setText("All Words Studied!");
+                    Config.counter = 0;
+                    return 0;
+                } else
+                    return ++Config.counter;
+            case 2:
+                if (Config.counter + 1 >= Dictionary.allTimeListSize) {
+                    infoText.setText("All Words Studied!");
+                    Config.counter = 0;
+                    return 0;
+                } else
+                    return ++Config.counter;
+            default:
+                return 0;
+        }
+    }
+
 }
