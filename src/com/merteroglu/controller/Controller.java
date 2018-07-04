@@ -46,12 +46,6 @@ public class Controller {
     @FXML
     private TextField tryNativeWordTextField;
 
-    private String tryNativeWord = "";
-
-    private String nativeWordInput = "";
-
-    private String foreignWordInput = "";
-
     @FXML
     private Text foreignWordText;
 
@@ -64,12 +58,6 @@ public class Controller {
     @FXML
     private Label infoText;
 
-    private short exerciseType = 0;
-
-    private String[] row = new String[3];
-
-    private Random random = new Random();
-
     @FXML
     private Text linkedInURL;
 
@@ -79,8 +67,19 @@ public class Controller {
     private Text webSiteURL;
 
     @FXML
-    Text licenceURL;
+    private Text licenceURL;
 
+    private short exerciseType = 0;
+
+    private String[] row = new String[3];
+
+    private Random random = new Random();
+
+    private String tryNativeWord = "";
+
+    private String nativeWordInput = "";
+
+    private String foreignWordInput = "";
 
     private static final String linkedInURLasString = "https://linkedin.com/in/merteroglu";
 
@@ -88,36 +87,50 @@ public class Controller {
 
     private static final String licenceURLasString = webSiteURLasString + "/general-licence.html";
 
+    /**
+     * if new word added to system, save that to words.txt file
+     */
     @FXML
     private void saveToDictionary() {
         try {
             FileOperations.addToDictionary(addForeignWordTextField.getText(), addNativeWordTextField.getText());
             String[] row = new String[]{addForeignWordTextField.getText(), addNativeWordTextField.getText(), String.valueOf(System.currentTimeMillis())};
+            /*
+            dynamically add the new added word the active lists
+             */
             Dictionary.dailyExerciseWordList.add(row);
             Dictionary.weeklyExerciseWordList.add(row);
             Dictionary.allTimeExerciseWordList.add(row);
+            /*
+            update list sizes
+             */
             updateDictionarySizes();
+            /*
+            show success message to user
+             */
             infoText.setText("Succesfully added to dictionary!");
+
         } catch (IOException e) {
-            infoText.setText("Unknown Error Occured While Trying to Save");
+            infoText.setText("Unknown Error Occurred While Trying to Save");
         }
     }
 
+    /*
+        updates the list sizes
+    */
     private void updateDictionarySizes() {
         Dictionary.dailyListSize += 1;
         Dictionary.weeklyListSize += 1;
         Dictionary.allTimeListSize += 1;
     }
 
-    @FXML
-    private void startDailyExercise() {
-        goToNextWord();
-    }
-
+    /**
+     * select next word based on the exercise mod
+     */
     @FXML
     private void goToNextWord() {
         int tmpNumber;
-        switch (Dictionary.exerciseMod) {
+        switch (Config.exerciseMod) {
             case 0: {
                 if(Config.shuffleMod) tmpNumber = random.nextInt(Dictionary.dailyListSize);
                 else tmpNumber = getCounterNumber();
@@ -150,9 +163,12 @@ public class Controller {
         }
     }
 
+    /**
+     * set mod to daily mod and choose next word from daily dictionary list
+     */
     @FXML
     private void dailyMod() {
-        Dictionary.exerciseMod = 0;
+        Config.exerciseMod = 0;
         infoText.setText("Daily Exercise Mod Activated!");
         if (Dictionary.dailyExerciseWordList.size() == 0) infoText.setText("Your Dictionary Is Empty !");
         else {
@@ -169,9 +185,12 @@ public class Controller {
         }
     }
 
+    /**
+     * set mod to weekly mod and choose next word from weekly dictionary list
+     */
     @FXML
     private void weeklyMod() {
-        Dictionary.exerciseMod = 1;
+        Config.exerciseMod = 1;
         infoText.setText("Weekly Exercise Mod Activated!");
         if (Dictionary.weeklyExerciseWordList.size() == 0) infoText.setText("Your Dictionary Is Empty !");
         else {
@@ -188,10 +207,12 @@ public class Controller {
             }
         }
     }
-
+    /**
+     * set mod to all time mod and choose next word from all time dictionary list
+     */
     @FXML
     private void allTimeMod() {
-        Dictionary.exerciseMod = 2;
+        Config.exerciseMod = 2;
         infoText.setText("All Time Exercise Mod Activated!");
         if (Dictionary.allTimeExerciseWordList.size() == 0) infoText.setText("Your Dictionary Is Empty !");
         else {
@@ -208,6 +229,9 @@ public class Controller {
         }
     }
 
+    /**
+     * it changes the input area like native word exercise or foreign word exercise
+     */
     @FXML
     private void changeExerciseType() {
         if (exerciseType == 0) {
@@ -223,7 +247,7 @@ public class Controller {
             tryNativeWordTextField.setVisible(true);
             exerciseType = 0;
         }
-        switch (Dictionary.exerciseMod) {
+        switch (Config.exerciseMod) {
             case 0:
                 dailyMod();
                 break;
@@ -238,6 +262,10 @@ public class Controller {
         }
         infoText.setText("Exercise Type Changed !");
     }
+
+    /**
+     * it controls the input is correct
+     */
 
     @FXML
     private void check() {
@@ -293,29 +321,33 @@ public class Controller {
         else { Config.shuffleMod = true; infoText.setText("Shuffle Mod Opened!"); }
     }
 
+    /**
+     * it returns next word index based on the shuffle mod
+     * @return next word index
+     */
     private int getCounterNumber() {
-        switch (Dictionary.exerciseMod) {
+        switch (Config.exerciseMod) {
             case 0:
-                if (Config.counter + 1 >= Dictionary.dailyListSize) {
+                if (Config.lastWordIndexInList + 1 >= Dictionary.dailyListSize) {
                     infoText.setText("All Words Studied!");
-                    Config.counter = 0;
+                    Config.lastWordIndexInList = 0;
                     return 0;
                 } else
-                    return ++Config.counter;
+                    return ++Config.lastWordIndexInList;
             case 1:
-                if (Config.counter + 1 >= Dictionary.weeklyListSize) {
+                if (Config.lastWordIndexInList + 1 >= Dictionary.weeklyListSize) {
                     infoText.setText("All Words Studied!");
-                    Config.counter = 0;
+                    Config.lastWordIndexInList = 0;
                     return 0;
                 } else
-                    return ++Config.counter;
+                    return ++Config.lastWordIndexInList;
             case 2:
-                if (Config.counter + 1 >= Dictionary.allTimeListSize) {
+                if (Config.lastWordIndexInList + 1 >= Dictionary.allTimeListSize) {
                     infoText.setText("All Words Studied!");
-                    Config.counter = 0;
+                    Config.lastWordIndexInList = 0;
                     return 0;
                 } else
-                    return ++Config.counter;
+                    return ++Config.lastWordIndexInList;
             default:
                 return 0;
         }

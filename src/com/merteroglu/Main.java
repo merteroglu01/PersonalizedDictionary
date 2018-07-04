@@ -9,31 +9,46 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.List;
 
 public class Main extends Application {
-
+    /**
+     * handles the file operations such as open, close , read ...
+     */
     private FileOperations fileOperations;
-    private String data = "";
-    public static List<String[]> splittedLines;
-    @Override
 
-    // TODO: 28.06.2018 try catch for empty file
-    // TODO: 28.06.2018 handle throws
-    // TODO: 28.06.2018 addtoDictionary
-    // TODO: 28.06.2018 get from dictionary
-    // TODO: 2.07.2018 add comment lines
+    /**
+     * after successfully read operation result will be stored as String format
+     */
+    private String data = "";
+
+    @Override
     public void start(Stage primaryStage) throws Exception{
+
         fileOperations = new FileOperations();
+
         data = initialize();
+        /**
+         * if file is empty ( first start ) don't try to create dictionary.
+         */
         if(!data.isEmpty()) Dictionary.createDictionary(data);
+
         Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
+
         primaryStage.setTitle("Personalized Dictionary");
+
         primaryStage.getIcons().add(new Image("file:icon.png"));
+
         primaryStage.setScene(new Scene(root, 640, 400));
+
         primaryStage.show();
     }
 
+    /**
+     * checks the program is executed first time or not
+     * calls file reader method to read the words.txt file
+     * @return
+     * @throws IOException
+     */
     private String initialize() throws IOException {
         fileOperations.checkFirstStart();
         return data = fileOperations.readFileAsText();
