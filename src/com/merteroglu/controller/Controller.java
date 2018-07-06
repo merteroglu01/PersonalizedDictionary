@@ -91,7 +91,12 @@ public class Controller {
      * if new word added to system, save that to words.txt file
      */
     @FXML
-    private void saveToDictionary() {
+    public void saveToDictionary() {
+        if(addForeignWordTextField.getText().isEmpty() || addNativeWordTextField.getText().isEmpty())
+        {
+            infoText.setText("Missing words");
+            return;
+        }
         try {
             FileOperations.addToDictionary(addForeignWordTextField.getText(), addNativeWordTextField.getText());
             String[] row = new String[]{addForeignWordTextField.getText(), addNativeWordTextField.getText(), String.valueOf(System.currentTimeMillis())};
@@ -128,7 +133,7 @@ public class Controller {
      * select next word based on the exercise mod
      */
     @FXML
-    private void goToNextWord() {
+    public void goToNextWord() {
         int tmpNumber;
         switch (Config.exerciseMod) {
             case 0: {
@@ -268,18 +273,20 @@ public class Controller {
      */
 
     @FXML
-    private void check() {
+    public void check() {
         if (!tryForeignWord.isEmpty()) {
             if (exerciseType == 0) {
                 nativeWordInput = tryNativeWordTextField.getText().trim().toLowerCase();
                 if (tryNativeWord.equals(nativeWordInput)) {
                     infoText.setText("Correct!");
+                    tryNativeWordTextField.setText("");
                     goToNextWord();
                 } else infoText.setText("Not correct!");
             } else {
                 foreignWordInput = tryForeignWordTextField.getText().trim().toLowerCase();
                 if (tryForeignWord.equals(foreignWordInput)) {
                     infoText.setText("Correct!");
+                    tryForeignWordTextField.setText("");
                     goToNextWord();
                 }
             }
@@ -353,4 +360,22 @@ public class Controller {
         }
     }
 
+    @FXML
+    private void showTheAnswer(){
+        if(exerciseType == 0)
+            tryNativeWordTextField.setText(tryNativeWord);
+        else tryForeignWordTextField.setText(tryForeignWord);
+    }
+
+    public TextField getTryNativeWordTextField() {
+        return tryNativeWordTextField;
+    }
+
+    public TextField getAddNativeWordTextField() {
+        return addNativeWordTextField;
+    }
+
+    public TextField getTryForeignWordTextField() {
+        return tryForeignWordTextField;
+    }
 }
