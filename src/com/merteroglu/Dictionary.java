@@ -42,11 +42,10 @@ public final class Dictionary {
 
     /**
      * initializer method that creates list based on the added time
-     * @param data All file(words.txt) read as string
+     * @param allLines All file(words.txt) read as List<String>
      */
-    static void createDictionary(String data){
-        String[] lines = data.split("\n");
-        for (String line : lines) {
+    static void createDictionary(List<String> allLines){
+        for (String line : allLines) {
             String[] tmp = (line.split(" "));
             /*
             if word added within a day

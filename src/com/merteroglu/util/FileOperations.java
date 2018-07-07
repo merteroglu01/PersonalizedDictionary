@@ -9,15 +9,13 @@ import java.nio.file.Files;
 import static java.nio.file.StandardOpenOption.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 public class FileOperations {
 
-    private String data = "";
-
-    public String readFileAsText() throws IOException{
-        data = new String(Files.readAllBytes(Paths.get(Config.fullPath)));
-        System.out.println(data);
-        return data;
+    public List<String> readAllLinesFromFile() throws IOException{
+        Charset charset = Charset.forName("UTF-8");
+        return Files.readAllLines(Paths.get(Config.fullPath),charset);
     }
 
     public boolean checkFirstStart() throws IOException{
