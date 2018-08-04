@@ -31,7 +31,7 @@ public class FileOperations {
     }
 
     public static void addToDictionary(String foreignWord, String nativeWord) throws IOException {
-        String row = foreignWord.trim() + " " + nativeWord.trim() + " " + System.currentTimeMillis() + "\n";
+        String row = foreignWord.trim() + "_" + nativeWord.trim() + "_" + System.currentTimeMillis() + "\n";
         Path path = Paths.get(Config.fullPath);
         Files.write(path,row.getBytes(Charset.forName("UTF-8")),APPEND);
     }

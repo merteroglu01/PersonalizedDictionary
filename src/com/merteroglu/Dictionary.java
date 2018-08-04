@@ -46,7 +46,7 @@ public final class Dictionary {
      */
     static void createDictionary(List<String> allLines){
         for (String line : allLines) {
-            String[] tmp = (line.split(" "));
+            String[] tmp = (line.split("_"));
             /*
             if word added within a day
              */
