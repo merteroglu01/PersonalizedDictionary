@@ -113,7 +113,10 @@ public class Controller {
             /*
             show success message to user
              */
-            infoText.setText("Succesfully added to dictionary!");
+            infoText.setText("Succesfully "+ addForeignWordTextField.getText()+ " added to dictionary!");
+            addForeignWordTextField.setText("");
+            addNativeWordTextField.setText("");
+            addForeignWordTextField.requestFocus();
 
         } catch (IOException e) {
             infoText.setText("Unknown Error Occurred While Trying to Save");
@@ -288,6 +291,8 @@ public class Controller {
                     infoText.setText("Correct!");
                     tryForeignWordTextField.setText("");
                     goToNextWord();
+                }else{
+                    infoText.setText("Not correct!");
                 }
             }
         } else {
